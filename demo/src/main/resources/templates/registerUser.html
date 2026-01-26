@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판 회원가입</title>
+    <style>
+        .input-group { display: flex; align-items: center; margin-bottom: 10px; }
+        .input-group label { width: 80px; font-weight: bold; }
+        .input-group input { flex: 1; max-width: 200px; }
+        .btn-container { margin-left: 80px; }
+        #idMsg { margin-left: 80px; display: block; font-size: 0.9em; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+<h1> 게시판 회원가입 </h1>
+
+<form action="/register" method="POST">
+    <input type="hidden" id="idChecked" value="false">
+    <input type="hidden" id="emailChecked" value="false">
+
+
+
+    <div class="input-group">
+        <label>ID </label>
+        <input type="text" name="loginId" id="loginId" required>
+        <button type="button" onclick="checkId()">중복 확인</button>
+    </div>
+    <span id="idMsg"></span>
+
+
+
+    <div class="input-group">
+        <label>PW </label>
+        <input type="password" name="password" required>
+    </div>
+
+    <div class="input-group">
+        <label>name </label>
+        <input type="text" name="displayName" required>
+    </div>
+
+    <div class="input-group">
+        <label>email </label>
+        <input type="email" name="email" required>
+        <button type="button" onclick="checkEmail()">중복 이메일</button>
+    </div>
+    <span id="emailMsg" style="margin-left:80px; display:block; font-size:0.9em;"></span>
+
+    <div class="btn-container">
+        <button type="submit" id="submitBtn" disabled>회원가입</button>
+    </div>
+</form>
+<script>
+    function updateSubmitButton() {
+        const idChecked = document.getElementById('idChecked').value === "true";
+        const emailChecked = document.getElementById('emailChecked').value === "true";
+        document.getElementById('submitBtn').disabled = !(idChecked && emailChecked);
+    }
+
+    function checkId() {
+        const loginId = document.getElementById('loginId').value;
+        const msg = document.getElementById('idMsg');
+        const idChecked = document.getElementById('idChecked');
+
+        if (!loginId) {
+            alert("아이디를 입력하세요.");
+            return;
+        }
+
+        fetch(`/api/member/check-id?loginId=${loginId}`)
+            .then(res => res.json())
+            .then(isDuplicate => {
+                if (isDuplicate) {
+                    msg.innerText = "이미 사용 중인 아이디입니다.";
+                    msg.style.color = "red";
+                    idChecked.value = "false";
+                } else {
+                    msg.innerText = "사용 가능한 아이디입니다.";
+                    msg.style.color = "green";
+                    idChecked.value = "true";
+                }
+                updateSubmitButton();
+            });
+    }
+
+    function checkEmail() {
+        const email = document.querySelector('input[name="email"]').value;
+        const msg = document.getElementById('emailMsg');
+        const emailChecked = document.getElementById('emailChecked');
+
+        if (!email) {
+            alert("이메일을 입력하세요.");
+            return;
+        }
+
+        fetch(`/api/member/check-email?email=${email}`)
+            .then(res => res.json())
+            .then(isDuplicate => {
+                if (isDuplicate) {
+                    msg.innerText = "이미 사용 중인 이메일입니다.";
+                    msg.style.color = "red";
+                    emailChecked.value = "false";
+                } else {
+                    msg.innerText = "사용 가능한 이메일입니다.";
+                    msg.style.color = "green";
+                    emailChecked.value = "true";
+                }
+                updateSubmitButton();
+            });
+    }
+
+    // 입력 변경 시 상태 초기화
+    document.getElementById('loginId').addEventListener('input', () => {
+        document.getElementById('idChecked').value = "false";
+        document.getElementById('idMsg').innerText = "";
+        updateSubmitButton();
+    });
+
+    document.querySelector('input[name="email"]').addEventListener('input', () => {
+        document.getElementById('emailChecked').value = "false";
+        document.getElementById('emailMsg').innerText = "";
+        updateSubmitButton();
+    });
+</script>
+
+
+
+</body>
+</html>

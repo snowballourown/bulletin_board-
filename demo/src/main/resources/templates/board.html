@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+</head>
+<body>
+<h1>게시판입니다요</h1>
+
+<div sec:authorize="isAnonymous()">
+    <a href="/login"><button type="button">로그인하러 가기</button></a>
+</div>
+
+<div sec:authorize="isAuthenticated()">
+    <span th:text="${#authentication.name}">사용자</span>님 환영합니다!
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <button type="submit">로그아웃</button>
+    </form>
+    <br><br>
+    <a href="/item/write"><button>글쓰기</button></a>
+</div>
+
+<hr>
+
+<h3>글 목록</h3>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>내용</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${items}">
+        <td th:text="${item.id}">1</td>
+        <td>
+            <a th:href="@{/item/edit/{id}(id=${item.id})}" th:text="${item.title}">제목</a>
+        </td>
+        <td th:text="${item.name}">작성자이름</td>
+        <td th:text="${item.text}">본문 일부</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

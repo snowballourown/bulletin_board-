@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>새 글 작성</title>
+    <style>
+        .container { width: 600px; margin: 50px auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input[type="text"], textarea { width: 100%; padding: 10px; box-sizing: border-box; }
+        .btn-area { text-align: right; }
+        button { padding: 10px 20px; cursor: pointer; }
+        .btn-submit { background-color: #28a745; color: white; border: none; }
+        .btn-cancel { background-color: #6c757d; color: white; border: none; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${item != null} ? '글 수정하기' : '새 글 작성'">제목</h1>
+    <hr>
+    <form id="boardForm">
+        <input type="hidden" id="itemId" th:value="${item?.id}">
+
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" id="title" th:value="${item?.title}" placeholder="제목을 입력하세요" required>
+        </div>
+        <div class="form-group">
+            <label for="text">내용</label>
+            <textarea id="text" rows="10" th:text="${item?.text}" placeholder="내용을 입력하세요" required></textarea>
+        </div>
+
+        <div class="btn-area">
+            <a href="/item/view" class="btn-cancel">취소</a>
+
+            <button th:if="${item == null}" type="button" class="btn-submit" onclick="submitPost()">등록</button>
+            <button th:if="${item != null}" type="button" class="btn-submit" onclick="updatePost()">수정 완료</button>
+        </div>
+    </form>
+</div>
+
+
+<script>
+    function updatePost() {
+        const itemId = document.getElementById('itemId').value;
+        const data = {
+            itemId: itemId, // DTO 형식에 맞춰 전달
+            title: document.getElementById('title').value,
+            text: document.getElementById('text').value
+        };
+
+        // 아까 만든 @PatchMapping API 호출
+        fetch('/item', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("수정되었습니다.");
+                window.location.href = "/item/view";
+            } else {
+                alert("수정 실패!");
+            }
+        });
+    }
+
+    function submitPost() {
+        const title = document.getElementById('title').value;
+        const text = document.getElementById('text').value;
+
+
+        if (!title || !text) {
+            alert("제목과 내용을 모두 입력해주세요.");
+            return;
+        }
+
+        // 서버의 @PostMapping("/item") API로 보낼 데이터
+        const data = {
+            title: title,
+            text: text
+        };
+
+        fetch('/item', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("성공적으로 등록되었습니다!");
+                window.location.href = "/item/view"; // 등록 성공 시 목록 페이지로 이동
+            } else {
+                alert("등록에 실패했습니다. 다시 시도해주세요.");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("서버 통신 중 에러가 발생했습니다.");
+        });
+    }
+</script>
+
+</body>
+</html>
