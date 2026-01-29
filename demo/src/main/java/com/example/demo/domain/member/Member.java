@@ -1,16 +1,19 @@
 package com.example.demo.domain.member;
 
 
+import com.example.demo.domain.member.dto.response.MemberResponseDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@Builder
 public class Member {
 
     @Id
@@ -25,4 +28,6 @@ public class Member {
 
     @Column(unique = true)
     String email;
+
+
 }

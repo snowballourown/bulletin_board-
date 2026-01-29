@@ -70,10 +70,7 @@ public class ItemServiceImpl implements ItemService {
 
         Item item = itemRepository.findById(request.getItemId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 아이템이 존재하지 않습니다. ID: " + request.getItemId()));
-
-
         itemRepository.delete(item);
-
         return UpdateItemResponse.builder()
                 .itemId(item.getItemId())
                 .build();
