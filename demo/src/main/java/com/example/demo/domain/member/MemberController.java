@@ -19,7 +19,7 @@ public class MemberController {
 
     private final MemberRepository memberRepository;
     private final MemberService memberService;
-
+    @ResponseBody
     @PostMapping("/register")
     public ResponseEntity<CreateMemberResponse> userRegister(CreateMemberRequest request) {
          CreateMemberResponse createMemberResponse = memberService.createMember(request);
@@ -38,7 +38,7 @@ public class MemberController {
 //        return ResponseEntity.ok(memberService.checkEmailDuplicate(email));
 //    }
 
-
+    @ResponseBody
     @GetMapping("/login")
     public ResponseEntity<MemberResponseDto> login(CreateMemberRequest createMemberRequest) {
         MemberResponseDto response= memberService.findMember(createMemberRequest.getLoginId());
@@ -55,7 +55,7 @@ public class MemberController {
 //    public String lobilocation() {
 //        return "lobi.html";
 //    }
-
+    @ResponseBody
     @GetMapping("/root")
     public String hello() {
         return "hell0wordㅎㅎ되겠지?????ㅎㅎㅎㅎㅎㅎㅎㅎ";
