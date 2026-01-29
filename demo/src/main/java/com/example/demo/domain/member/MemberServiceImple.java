@@ -69,7 +69,7 @@ public class MemberServiceImple implements MemberService {
         CreateMemberResponse createMemberResponse = new CreateMemberResponse();
         createMemberResponse.setDisplayName(request.getDisplayName());
         createMemberResponse.setEmail(request.getEmail());
-
+        createMemberResponse.setLoginId(request.getLoginId());
         return createMemberResponse;
     }
 
