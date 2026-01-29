@@ -21,7 +21,7 @@ public class MemberController {
     private final MemberService memberService;
     @ResponseBody
     @PostMapping("/register")
-    public ResponseEntity<CreateMemberResponse> userRegister(CreateMemberRequest request) {
+    public ResponseEntity<CreateMemberResponse> userRegister(  @RequestBody CreateMemberRequest request) {
          CreateMemberResponse createMemberResponse = memberService.createMember(request);
         return ResponseEntity.ok(createMemberResponse);
     }
@@ -40,7 +40,7 @@ public class MemberController {
 
     @ResponseBody
     @GetMapping("/login")
-    public ResponseEntity<MemberResponseDto> login(CreateMemberRequest createMemberRequest) {
+    public ResponseEntity<MemberResponseDto> login(  @RequestBody CreateMemberRequest createMemberRequest) {
         MemberResponseDto response= memberService.findMember(createMemberRequest.getLoginId());
         return ResponseEntity.ok(response);
     }

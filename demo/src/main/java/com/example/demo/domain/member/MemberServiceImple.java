@@ -42,7 +42,7 @@ public class MemberServiceImple implements MemberService {
 
     @Override
     @Transactional
-    public CreateMemberResponse createMember(CreateMemberRequest request) {
+    public CreateMemberResponse createMember( CreateMemberRequest request) {
 
         Optional<Member> member = memberRepository.findByLoginId(request.getLoginId());
         if (!member.isEmpty()) {
@@ -75,7 +75,7 @@ public class MemberServiceImple implements MemberService {
 
     @Override
     @Transactional
-    public UpdateMemberResponse editMember(Long id,UpdateMemberRequest request) {
+    public UpdateMemberResponse editMember(Long id, UpdateMemberRequest request) {
         Optional<Member> member = memberRepository.findById(id);
         if (member.isPresent()) {
             throw new IllegalArgumentException("해당 아이디는 존재않습니다");
