@@ -107,8 +107,8 @@ public class MemberServiceImple implements MemberService {
     }
 
     @Override
-    public MemberResponseDto findMember(String loginId) {
-        Optional<Member> member = memberRepository.findByLoginId(loginId);
+    public MemberResponseDto findMember(Long id) {
+        Optional<Member> member = memberRepository.findById(id);
         if (member.isPresent()) {
             throw new IllegalArgumentException("해당 아이디는 존재않습니다");
         }

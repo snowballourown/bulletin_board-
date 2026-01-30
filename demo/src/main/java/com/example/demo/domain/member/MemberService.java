@@ -19,7 +19,7 @@ public interface MemberService {
     public CreateMemberResponse createMember(CreateMemberRequest request);
     UpdateMemberResponse editMember(Long Id, UpdateMemberRequest updateMemberRequest);
     UpdateMemberResponse deleteMember(UpdateMemberRequest request);
-    public MemberResponseDto findMember(String loginId);
+    public MemberResponseDto findMember(Long id);
     public List<MemberResponseDto> findAll();
 
 }
